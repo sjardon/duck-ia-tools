@@ -1,0 +1,7 @@
+{
+  "name": "implementation",
+  "type": "agent",
+  "description": "Implements subtasks from a decomposition file including unit tests, following clean architecture",
+  "tags": ["implementation", "coding", "testing"],
+  "targets": ["claude"]
+}

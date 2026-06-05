@@ -1,0 +1,7 @@
+{
+  "name": "code-reviewer",
+  "type": "agent",
+  "description": "Reviews code for quality, security, and best practices",
+  "tags": ["review", "quality", "security"],
+  "targets": ["claude", "copilot"]
+}

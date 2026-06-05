@@ -1,0 +1,7 @@
+{
+  "name": "review",
+  "type": "agent",
+  "description": "Validates implementation via lint/build/test (Phase 1) and architecture/quality checks (Phase 2)",
+  "tags": ["review", "quality", "testing"],
+  "targets": ["claude"]
+}

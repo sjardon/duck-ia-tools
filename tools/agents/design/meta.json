@@ -1,0 +1,7 @@
+{
+  "name": "design",
+  "type": "agent",
+  "description": "Produces interface contracts (DTOs, repository signatures, API shapes) before implementation",
+  "tags": ["design", "architecture", "types"],
+  "targets": ["claude"]
+}

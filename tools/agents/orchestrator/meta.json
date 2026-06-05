@@ -1,0 +1,7 @@
+{
+  "name": "orchestrator",
+  "type": "agent",
+  "description": "Coordinates analyst → design → git → implementation → review pipeline for BACKLOG tasks",
+  "tags": ["orchestration", "workflow", "pipeline"],
+  "targets": ["claude", "copilot"]
+}

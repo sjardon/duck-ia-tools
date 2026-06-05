@@ -1,0 +1,7 @@
+{
+  "name": "analyst",
+  "type": "agent",
+  "description": "Breaks down a BACKLOG task into detailed technical subtasks with complexity rating and branch name",
+  "tags": ["analysis", "planning", "decomposition"],
+  "targets": ["claude"]
+}

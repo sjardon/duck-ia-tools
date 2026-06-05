@@ -1,0 +1,7 @@
+{
+  "name": "git",
+  "type": "agent",
+  "description": "Handles git operations: CREATE_BRANCH, COMMIT, and UPDATE_CHANGELOG",
+  "tags": ["git", "version-control", "changelog"],
+  "targets": ["claude", "copilot"]
+}

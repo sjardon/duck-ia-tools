@@ -1,0 +1,26 @@
+{
+  "name": "duck-ia",
+  "version": "0.1.0",
+  "description": "CLI to install AI coding components into your AI tools",
+  "type": "module",
+  "bin": {
+    "duck": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.9.1",
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "@types/node": "^20.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "docs",
+  "type": "agent",
+  "description": "Updates global project docs based on what was actually built.",
+  "tags": ["docs"],
+  "targets": ["claude"]
+}

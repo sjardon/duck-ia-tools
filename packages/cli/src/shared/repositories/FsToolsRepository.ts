@@ -89,6 +89,12 @@ export class FsToolsRepository implements IToolsRepository {
       throw new Error(`Tool "${name}" not found in ${this.toolsPath}`);
     }
 
+    if (meta.type === "instruction" && !meta.destination) {
+      throw new Error(
+        `Component "${name}" of type "instruction" is missing the required "destination" field in meta.json.`
+      );
+    }
+
     const toolDir = join(this.toolsPath, meta.path);
 
     const variantPath = join(toolDir, "variants", `${target}.md`);

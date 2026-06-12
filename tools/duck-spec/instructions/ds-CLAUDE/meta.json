@@ -1,0 +1,8 @@
+{
+  "name": "ds-CLAUDE",
+  "type": "instruction",
+  "description": "Project-level CLAUDE.md instructions for the duck-spec workflow",
+  "tags": ["duck-spec", "instructions", "claude"],
+  "targets": ["claude"],
+  "destination": "ds/CLAUDE.md"
+}

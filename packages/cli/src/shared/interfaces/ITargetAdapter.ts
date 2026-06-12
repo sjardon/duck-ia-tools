@@ -3,6 +3,7 @@ export interface InstallOptions {
   toolType: string;
   content: string;
   projectPath: string;
+  destination?: string;
 }
 
 export interface ITargetAdapter {

@@ -17,7 +17,18 @@ export class ClaudeTarget implements ITargetAdapter {
       await this.updateSettingsHooks(projectPath, content);
     } else if (toolType === "mcp-server") {
       await this.updateSettingsMcpServers(projectPath, content);
+    } else if (toolType === "instruction") {
+      if (!options.destination) {
+        throw new Error("destination is required for instruction type");
+      }
+      const absoluteDestination = join(projectPath, options.destination);
+      await this.writeInstruction(absoluteDestination, content);
     }
+  }
+
+  private async writeInstruction(absoluteDestination: string, content: string): Promise<void> {
+    await mkdir(dirname(absoluteDestination), { recursive: true });
+    await writeFile(absoluteDestination, content, "utf8");
   }
 
   private async installSkill(projectPath: string, content: string): Promise<void> {

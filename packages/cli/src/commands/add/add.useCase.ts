@@ -10,7 +10,7 @@ export class AddUseCase {
     private readonly adapters: ITargetAdapter[],
   ) {}
 
-  async execute(toolName: string, targetName: string): Promise<void> {
+  async execute(toolName: string, targetName: string, dest?: string): Promise<void> {
     const tool = await this.repository.getByName(toolName);
     if (!tool) {
       throw new Error(`Tool "${toolName}" not found.`);
@@ -41,6 +41,7 @@ export class AddUseCase {
       toolType: tool.type,
       content,
       projectPath: process.cwd(),
+      destination: dest ?? tool.destination,
     };
 
     await adapter.install(options);

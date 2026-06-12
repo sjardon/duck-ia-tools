@@ -20,6 +20,7 @@
     "ds-review",
     "ds-docs",
     "ds-integrate",
-    "ds-orchestrate"
+    "ds-orchestrate",
+    "ds-CLAUDE"
   ]
 }

@@ -5,7 +5,26 @@ description: Orchestrates the full duck-spec workflow for a feature from FEATURE
 
 # Duck-Spec Orchestrator
 
-You coordinate the duck-spec implementation workflow. You do NOT implement anything — you invoke agents in order, pass the shared context object between them, and handle retries and failures.
+You coordinate the duck-spec implementation workflow. You do NOT implement anything — you spawn subagents in order using the **`Agent` tool**, pass the shared context object between them, and handle retries and failures.
+
+## Invocation protocol
+
+Every agent invocation in this workflow MUST use the **`Agent` tool** with `subagent_type` set to the agent name. Never load a skill file directly. Never implement steps yourself.
+
+Example:
+```
+Agent(subagent_type="ds-analysis", prompt="<context JSON and instructions>")
+```
+
+Each agent is identified by its `subagent_type`:
+| Step | subagent_type |
+|---|---|
+| Branch creation / MR | `ds-integrate` |
+| Analysis | `ds-analysis` |
+| Design | `ds-design` |
+| Implementation | `ds-implement` |
+| Review | `ds-review` |
+| Docs | `ds-docs` |
 
 ## Input
 
@@ -53,7 +72,7 @@ Output this checklist after each step and mark `[x]` as steps complete:
 
 ### Step 1 — Branch creation (MANDATORY)
 
-Invoke: **ds-integrate** — operation `CREATE_BRANCH`
+Use the **`Agent` tool** with `subagent_type: "ds-integrate"` — operation `CREATE_BRANCH`
 
 Pass:
 ```json
@@ -68,7 +87,7 @@ Update `lastStep` to `"branch"`.
 
 ### Step 2 — Analysis (MANDATORY)
 
-Invoke: **ds-analysis**
+Use the **`Agent` tool** with `subagent_type: "ds-analysis"`
 
 Pass the current context. ds-analysis reads the feature from `modules/<module>/FEATURES.md`, produces `modules/<module>/<feature-dir>/analysis.md`, and returns the updated context with `effort` set.
 
@@ -78,7 +97,7 @@ Update `lastStep` to `"analysis"`.
 
 ### Step 3 — Design (MANDATORY)
 
-Invoke: **ds-design**
+Use the **`Agent` tool** with `subagent_type: "ds-design"`
 
 Pass the current context. ds-design reads `analysis.md`, evaluates at least three solution alternatives, chooses one, and produces:
 - `modules/<module>/<feature-dir>/design.md` — technical design, contracts, files to modify
@@ -90,7 +109,7 @@ Update `lastStep` to `"design"`.
 
 ### Step 4 — Implementation (MANDATORY)
 
-Invoke: **ds-implement**
+Use the **`Agent` tool** with `subagent_type: "ds-implement"`
 
 Pass the current context. ds-implement reads `analysis.md`, `design.md`, and `tasks.md` and implements all tasks.
 
@@ -105,7 +124,7 @@ Update `lastStep` to `"implement"`.
 
 ### Step 5 — Review (MANDATORY, with retry)
 
-Invoke: **ds-review**
+Use the **`Agent` tool** with `subagent_type: "ds-review"`
 
 Pass the current context. ds-review runs in two phases:
 
@@ -126,14 +145,14 @@ ds-review returns:
 
 **If `status` is `"fail"`**:
 - Set `pendingFixes` to the `findings` array from the response
-- Re-invoke **ds-implement** passing the updated context (with `pendingFixes` populated)
-- Re-invoke **ds-review** after each implementation retry
+- Use the **`Agent` tool** with `subagent_type: "ds-implement"` passing the updated context (with `pendingFixes` populated)
+- Use the **`Agent` tool** with `subagent_type: "ds-review"` after each implementation retry
 - Maximum **3 retries** total
 - If still failing after 3 retries: STOP and report all findings to the user. Do NOT proceed to Step 6.
 
 ### Step 6 — Docs (MANDATORY)
 
-Invoke: **ds-docs**
+Use the **`Agent` tool** with `subagent_type: "ds-docs"`
 
 Pass the current context. ds-docs reads `analysis.md` and `design.md` and updates the relevant global documentation files based on what was actually built (ARCHITECTURE.md, BACKEND.md, DOMAIN.md, FEATURES.md status, etc.).
 
@@ -141,7 +160,7 @@ Update `lastStep` to `"docs"`.
 
 ### Step 7 — Integrate (MANDATORY)
 
-Invoke: **ds-integrate** — operation `CREATE_MR`
+Use the **`Agent` tool** with `subagent_type: "ds-integrate"` — operation `CREATE_MR`
 
 Pass the current context. ds-integrate creates an MR in GitHub with all changes from the feature branch.
 
@@ -149,7 +168,7 @@ Update `lastStep` to `"integrate"`.
 
 ## Rules
 
-- Each agent invocation MUST include only its own skill file — do not attach other skill files.
+- Each agent MUST be invoked via the **`Agent` tool** with the correct `subagent_type`. Never load or read skill files yourself — let each subagent load its own.
 - Never skip a step, even if it seems unnecessary.
 - Never implement anything yourself — coordinate only.
 - Always pass the full context object to each agent and update it with the returned values before the next invocation.

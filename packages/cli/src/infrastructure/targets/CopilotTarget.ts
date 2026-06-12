@@ -1,13 +1,23 @@
 import { mkdir, appendFile, writeFile } from "fs/promises";
 import { existsSync } from "fs";
-import { join } from "path";
+import { join, dirname } from "path";
 import type { ITargetAdapter, InstallOptions } from "../../shared/interfaces/ITargetAdapter.js";
 
 export class CopilotTarget implements ITargetAdapter {
   name = "copilot";
 
   async install(options: InstallOptions): Promise<void> {
-    const { content, projectPath } = options;
+    const { toolType, content, projectPath } = options;
+
+    if (toolType === "instruction") {
+      if (!options.destination) {
+        throw new Error("destination is required for instruction type");
+      }
+      const absoluteDestination = join(projectPath, options.destination);
+      await mkdir(dirname(absoluteDestination), { recursive: true });
+      await writeFile(absoluteDestination, content, "utf8");
+      return;
+    }
 
     const githubDir = join(projectPath, ".github");
     const filePath = join(githubDir, "copilot-instructions.md");

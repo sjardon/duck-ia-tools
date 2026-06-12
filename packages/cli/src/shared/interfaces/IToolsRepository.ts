@@ -1,11 +1,12 @@
 export interface ToolMeta {
   name: string;
-  type: "agent" | "hook" | "skill" | "mcp-server" | "kit";
+  type: "agent" | "hook" | "skill" | "mcp-server" | "kit" | "instruction";
   description: string;
   tags: string[];
   targets: string[];
   path: string;
   components?: string[];
+  destination?: string;
 }
 
 export interface IToolsRepository {

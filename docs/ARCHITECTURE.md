@@ -49,6 +49,33 @@ Error: Duplicate tool name "my-agent" found at:
 Resolve the conflict before starting.
 ```
 
+### instruction type
+
+An `instruction` component represents a project-level instruction file (e.g., `CLAUDE.md` for Claude Code, `.github/copilot-instructions.md` for GitHub Copilot). It is installed by `duck add` directly into the user's project at the path defined by the mandatory `destination` field.
+
+```jsonc
+// tools/duck-spec/instructions/ds-CLAUDE/meta.json
+{
+  "name": "ds-CLAUDE",
+  "type": "instruction",
+  "description": "Project-level CLAUDE.md instructions for the duck-spec workflow",
+  "tags": ["duck-spec", "instructions", "claude"],
+  "targets": ["claude"],
+  "destination": "CLAUDE.md"
+}
+```
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `type` | `"instruction"` | yes | Marks this entry as an instruction component |
+| `destination` | `string` | yes | Default install path relative to the user's project root. Absence causes a validation error at install time. |
+
+Variant resolution (`variants/<target>.md` → fallback `instructions.md`) applies to `instruction` components the same way it does for `agent` components. If the destination file already exists in the user's project, the CLI presents an interactive overwrite confirmation before writing.
+
+The `--dest <path>` flag on `duck add` overrides `destination` at install time.
+
+---
+
 ### kit type
 
 A `kit` is a special tool type that groups other tools by name reference. Instead of providing its own installable content, a kit's `meta.json` lists the tools to install together.

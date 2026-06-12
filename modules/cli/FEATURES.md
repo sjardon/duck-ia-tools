@@ -6,7 +6,7 @@
 # Lista de features:
 
 ## CLI-001 — Soporte para instrucciones instalables
-**Estado:** TODO
+**Estado:** DONE
 **Contexto:** El CLI actualmente soporta instalar agentes, herramientas, hooks y skills desde el repositorio `duck-ia-tools` hacia proyectos del usuario. No existe soporte para archivos de instrucciones de proyecto (como `CLAUDE.md` para Claude Code o `.github/copilot-instructions.md` para GitHub Copilot), que son archivos que configuran el comportamiento del AI tool a nivel de proyecto.
 **Objetivo:** Permitir que el CLI instale archivos de instrucciones desde el repositorio hacia el proyecto del usuario, como un nuevo tipo de componente instalable mediante el comando `duck add`.
 **Requerimientos funcionales:**

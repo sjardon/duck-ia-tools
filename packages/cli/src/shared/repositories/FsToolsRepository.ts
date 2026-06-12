@@ -1,44 +1,77 @@
-import { readdir, readFile, stat } from "fs/promises";
-import { join } from "path";
+import { readdir, readFile } from "fs/promises";
+import { join, relative } from "path";
 import type { IToolsRepository, ToolMeta } from "../interfaces/IToolsRepository.js";
-
-const TOOL_TYPES = ["agents", "hooks", "skills", "mcp-servers"] as const;
 
 export class FsToolsRepository implements IToolsRepository {
   constructor(private readonly toolsPath: string) {}
 
+  private async walkForMetaFiles(dir: string): Promise<string[]> {
+    const found: string[] = [];
+
+    let entries;
+    try {
+      entries = await readdir(dir, { withFileTypes: true });
+    } catch {
+      return found;
+    }
+
+    for (const entry of entries) {
+      if (!entry.isDirectory()) continue;
+
+      const subDir = join(dir, entry.name);
+      const metaPath = join(subDir, "meta.json");
+
+      // Check if this directory contains a meta.json
+      try {
+        await readFile(metaPath, "utf-8");
+        found.push(metaPath);
+      } catch {
+        // No meta.json in this directory; still recurse
+      }
+
+      // Recurse regardless of whether meta.json was found here
+      const nested = await this.walkForMetaFiles(subDir);
+      found.push(...nested);
+    }
+
+    return found;
+  }
+
   async listAll(): Promise<ToolMeta[]> {
+    const metaPaths = await this.walkForMetaFiles(this.toolsPath);
     const results: ToolMeta[] = [];
 
-    for (const type of TOOL_TYPES) {
-      const typeDir = join(this.toolsPath, type);
-
-      let entries: string[];
+    for (const metaPath of metaPaths) {
       try {
-        entries = await readdir(typeDir);
+        const raw = await readFile(metaPath, "utf-8");
+        const parsed = JSON.parse(raw) as ToolMeta;
+        const toolDir = join(metaPath, "..");
+        parsed.path = relative(this.toolsPath, toolDir);
+        results.push(parsed);
       } catch {
         continue;
       }
+    }
 
-      for (const entry of entries) {
-        const entryPath = join(typeDir, entry);
-        let entryStat;
-        try {
-          entryStat = await stat(entryPath);
-        } catch {
-          continue;
-        }
-        if (!entryStat.isDirectory()) continue;
+    // Validate name uniqueness
+    const byName = new Map<string, string[]>();
+    for (const meta of results) {
+      const paths = byName.get(meta.name) ?? [];
+      paths.push(join(meta.path, "meta.json"));
+      byName.set(meta.name, paths);
+    }
 
-        const metaPath = join(entryPath, "meta.json");
-        try {
-          const raw = await readFile(metaPath, "utf-8");
-          const meta: ToolMeta = JSON.parse(raw);
-          results.push(meta);
-        } catch {
-          continue;
-        }
+    const duplicates: string[] = [];
+    for (const [name, paths] of byName) {
+      if (paths.length > 1) {
+        duplicates.push(`"${name}": ${paths.join(", ")}`);
       }
+    }
+
+    if (duplicates.length > 0) {
+      throw new Error(
+        `Duplicate tool names detected in ${this.toolsPath}:\n${duplicates.join("\n")}`
+      );
     }
 
     return results;
@@ -50,28 +83,22 @@ export class FsToolsRepository implements IToolsRepository {
   }
 
   async getContent(name: string, target: string): Promise<string> {
-    for (const type of TOOL_TYPES) {
-      const toolDir = join(this.toolsPath, type, name);
+    const meta = await this.getByName(name);
 
-      let dirStat;
-      try {
-        dirStat = await stat(toolDir);
-      } catch {
-        continue;
-      }
-      if (!dirStat.isDirectory()) continue;
-
-      const variantPath = join(toolDir, "variants", `${target}.md`);
-      try {
-        return await readFile(variantPath, "utf-8");
-      } catch {
-        // fall through to instructions.md
-      }
-
-      const instructionsPath = join(toolDir, "instructions.md");
-      return await readFile(instructionsPath, "utf-8");
+    if (meta === null) {
+      throw new Error(`Tool "${name}" not found in ${this.toolsPath}`);
     }
 
-    throw new Error(`Tool "${name}" not found in ${this.toolsPath}`);
+    const toolDir = join(this.toolsPath, meta.path);
+
+    const variantPath = join(toolDir, "variants", `${target}.md`);
+    try {
+      return await readFile(variantPath, "utf-8");
+    } catch {
+      // fall through to instructions.md
+    }
+
+    const instructionsPath = join(toolDir, "instructions.md");
+    return await readFile(instructionsPath, "utf-8");
   }
 }

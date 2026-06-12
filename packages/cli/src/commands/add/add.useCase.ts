@@ -22,6 +22,13 @@ export class AddUseCase {
       );
     }
 
+    if (tool.type === "kit") {
+      for (const componentName of tool.components ?? []) {
+        await this.execute(componentName, targetName);
+      }
+      return;
+    }
+
     const content = await this.repository.getContent(toolName, targetName);
 
     const adapter = this.adapters.find((a) => a.name === targetName);

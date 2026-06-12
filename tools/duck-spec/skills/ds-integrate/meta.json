@@ -1,0 +1,7 @@
+{
+  "name": "skill-ds-integrate",
+  "type": "skill",
+  "description": "Handles git and GitHub integration for the duck-spec workflow. Supports CREATE_BRANCH and CREATE_MR operations.",
+  "tags": ["duck-spec", "skill", "git", "github", "integration"],
+  "targets": ["claude"]
+}

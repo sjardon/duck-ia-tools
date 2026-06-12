@@ -1,0 +1,7 @@
+{
+  "name": "skill-ds-docs",
+  "type": "skill",
+  "description": "Updates all living documentation after a feature is implemented. Reads analysis.md and design.md to determine what changed, then updates FEATURES.md, SPEC.md, and conditionally ARCHITECTURE.md, DOMAIN.md, BACKEND.md, and FRONTEND.md.",
+  "tags": ["duck-spec", "skill", "documentation", "specs"],
+  "targets": ["claude"]
+}

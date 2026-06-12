@@ -9,13 +9,26 @@ export class ClaudeTarget implements ITargetAdapter {
   async install(options: InstallOptions): Promise<void> {
     const { toolType, content, projectPath } = options;
 
-    if (toolType === "agent" || toolType === "skill") {
+    if (toolType === "agent") {
       await this.appendToMarkdown(join(projectPath, "CLAUDE.md"), content);
+    } else if (toolType === "skill") {
+      await this.installSkill(projectPath, content);
     } else if (toolType === "hook") {
       await this.updateSettingsHooks(projectPath, content);
     } else if (toolType === "mcp-server") {
       await this.updateSettingsMcpServers(projectPath, content);
     }
+  }
+
+  private async installSkill(projectPath: string, content: string): Promise<void> {
+    const nameMatch = content.match(/^name:\s*(.+)$/m);
+    const skillName = nameMatch?.[1]?.trim();
+    if (!skillName) {
+      throw new Error("Skill content is missing the required 'name' frontmatter field");
+    }
+    const skillDir = join(projectPath, ".claude", "skills", skillName);
+    await mkdir(skillDir, { recursive: true });
+    await writeFile(join(skillDir, "SKILL.md"), content, "utf8");
   }
 
   private async appendToMarkdown(filePath: string, content: string): Promise<void> {

@@ -1,0 +1,7 @@
+{
+  "name": "ds-plan",
+  "type": "agent",
+  "description": "Interactive planning agent. Takes a free-form idea and guides the user through a conversation to produce a well-formed FEATURES.md entry.",
+  "tags": ["duck-spec", "planning", "features", "requirements"],
+  "targets": ["claude"]
+}

@@ -7,7 +7,7 @@
 ---
 
 ## TOOLS-001 — Documentar nuevo modelo de directorio en ARCHITECTURE.md
-**Estado:** TODO
+**Estado:** DONE
 **Objetivo:** Actualizar la arquitectura para reflejar el nuevo modelo antes de tocar código: scan recursivo, `name` como identificador único global, tipo `kit`, y validación al inicio del servicio.
 **Requerimientos funcionales:**
 - Describir que cualquier directorio con `meta.json` es una tool, sin restricción de path
@@ -20,7 +20,7 @@
 ---
 
 ## TOOLS-002 — Extender interfaz ToolMeta
-**Estado:** TODO
+**Estado:** DONE
 **Objetivo:** Agregar los campos necesarios para soportar el nuevo modelo: `path` para localización en disco, `"kit"` como valor válido de `type`, y `components` para kits.
 **Requerimientos funcionales:**
 - Agregar `path: string` (relativo a la raíz de `tools/`, ej: `"analyst/openapi"`)
@@ -32,7 +32,7 @@
 ---
 
 ## TOOLS-003 — Refactorizar FsToolsRepository con scan recursivo
-**Estado:** TODO
+**Estado:** DONE
 **Objetivo:** Eliminar la constante `TOOL_TYPES` hardcodeada y reemplazar la lógica de discovery por un walk recursivo que registra toda tool con `meta.json`, valida unicidad de `name`, y resuelve contenido por `path`.
 **Requerimientos funcionales:**
 - `listAll()`: walk recursivo de `tools/`, parsear cada `meta.json` encontrado, poblar `path` con la ruta relativa al directorio raíz de tools
@@ -45,7 +45,7 @@
 ---
 
 ## TOOLS-004 — Migrar estructura de tools/ al nuevo layout flexible
-**Estado:** TODO
+**Estado:** DONE
 **Objetivo:** Reorganizar el directorio `tools/` eliminando las carpetas de tipo forzado (`agents/`, `hooks/`, etc.) y mover cada tool a un path que refleje su organización lógica.
 **Requerimientos funcionales:**
 - Mover el contenido de `tools/agents/*`, `tools/hooks/*`, `tools/skills/*`, `tools/mcp-servers/*` al nuevo layout (puede ser flat o con subcarpetas temáticas)

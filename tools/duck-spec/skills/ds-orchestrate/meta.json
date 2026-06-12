@@ -1,0 +1,7 @@
+{
+  "name": "skill-ds-orchestrate",
+  "type": "skill",
+  "description": "Orchestrates the full duck-spec workflow for a feature from FEATURES.md: analysis → design → implement → review (with retry) → docs → integrate.",
+  "tags": ["duck-spec", "skill", "workflow", "orchestration"],
+  "targets": ["claude"]
+}

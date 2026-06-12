@@ -1,0 +1,7 @@
+{
+  "name": "ds-orchestrate",
+  "type": "agent",
+  "description": "Orchestrates the full duck-spec workflow for a feature from FEATURES.md: analysis → design → implement → review (with retry) → docs → integrate. Coordinates all ds- agents without implementing anything itself.",
+  "tags": ["duck-spec", "orchestration", "workflow", "pipeline"],
+  "targets": ["claude"]
+}

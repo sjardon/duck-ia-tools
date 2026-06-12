@@ -1,0 +1,25 @@
+{
+  "name": "duck-spec",
+  "type": "kit",
+  "description": "Full duck-spec workflow kit: plan → analysis → design → implement → review → docs → integrate. Installs all ds-* agents in one step.",
+  "tags": ["duck-spec", "workflow", "kit"],
+  "targets": ["claude"],
+  "components": [
+    "skill-ds-plan",
+    "skill-ds-analysis",
+    "skill-ds-design",
+    "skill-ds-implement",
+    "skill-ds-review",
+    "skill-ds-docs",
+    "skill-ds-integrate",
+    "skill-ds-orchestrate",
+    "ds-plan",
+    "ds-analysis",
+    "ds-design",
+    "ds-implement",
+    "ds-review",
+    "ds-docs",
+    "ds-integrate",
+    "ds-orchestrate"
+  ]
+}

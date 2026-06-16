@@ -18,7 +18,7 @@ Use `/ds-orchestrate` to run the full workflow end-to-end for a feature listed i
 
 ## Feature artifacts
 
-Each feature lives under `modules/<module>/<feature-id>-<short-desc>/`:
+Each feature lives under `duck-spec/modules/<module>/<feature-id>-<short-desc>/`:
 
 - `analysis.md` — Requirements (R-IDs, NF-IDs, EC-IDs), out-of-scope, and edge cases.
 - `design.md` — Chosen solution, technical design, and file list.

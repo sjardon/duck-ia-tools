@@ -40,11 +40,11 @@ Determine which module this feature belongs to.
 - If the user specified a module, confirm it.
 - If not, propose a module based on the idea's domain. Explain briefly why.
 - If the feature spans multiple modules, surface this explicitly: propose how to split it and which module owns which part. Ask the user to confirm the split before continuing.
-- If the module does not exist yet, mention that you will create a new `modules/<module>/FEATURES.md` file.
+- If the module does not exist yet, mention that you will create a new `duck-spec/modules/<module>/FEATURES.md` file.
 
 ### Phase 3 — Assign the feature ID
 
-Read `modules/<module>/FEATURES.md` if it exists to find the last used ID for this module.
+Read `duck-spec/modules/<module>/FEATURES.md` if it exists to find the last used ID for this module.
 
 Derive the next sequential ID following the format already in use (e.g., if the last is `AUTH-003`, the next is `AUTH-004`).
 
@@ -74,7 +74,7 @@ Wait for the user's response. The user may:
 
 Using the FEATURES.md template format (read `FEATURES.template.md` in this skill's directory for the exact format), write the new entry.
 
-**If `modules/<module>/FEATURES.md` exists**: append the new entry at the end of the file.
+**If `duck-spec/modules/<module>/FEATURES.md` exists**: append the new entry at the end of the file.
 
 **If it does not exist**: create the file with the module header and the new entry.
 
@@ -100,7 +100,7 @@ Set `Estado` to `TODO`.
 After writing the entry, tell the user:
 
 ```
-Written: modules/<module>/FEATURES.md
+Written: duck-spec/modules/<module>/FEATURES.md
 Feature ID: <ID>
 
 To implement this feature, run ds-orchestrate with:

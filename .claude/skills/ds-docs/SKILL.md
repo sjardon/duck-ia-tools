@@ -19,7 +19,7 @@ You update the living documentation after a feature has passed review. You read 
 }
 ```
 
-The orchestrator also provides `module` — the module name matching a directory under `modules/`.
+The orchestrator also provides `module` — the module name matching a directory under `duck-spec/modules/`.
 
 ---
 
@@ -28,11 +28,12 @@ The orchestrator also provides `module` — the module name matching a directory
 The duck-spec workspace uses these living documents at two layers:
 
 ```
-ds/
-├── ARCHITECTURE.md   # infrastructure, services, deployment decisions
-├── DOMAIN.md         # index of all domain entities, aggregates, and value objects
-├── BACKEND.md        # backend conventions, patterns, and stack
-├── FRONTEND.md       # frontend conventions, components, and design system
+duck-spec/
+├── docs/
+│   ├── ARCHITECTURE.md   # infrastructure, services, deployment decisions
+│   ├── DOMAIN.md         # index of all domain entities, aggregates, and value objects
+│   ├── BACKEND.md        # backend conventions, patterns, and stack
+│   └── FRONTEND.md       # frontend conventions, components, and design system
 │
 └── modules/
     └── <module>/
@@ -47,18 +48,18 @@ ds/
 ### 1. Read the feature artifacts
 
 Read these files before modifying anything:
-- `modules/<module>/<feature-dir>/analysis.md` — requirements, scope, NFRs
-- `modules/<module>/<feature-dir>/design.md` — chosen solution, technical design, files modified
+- `duck-spec/modules/<module>/<feature-dir>/analysis.md` — requirements, scope, NFRs
+- `duck-spec/modules/<module>/<feature-dir>/design.md` — chosen solution, technical design, files modified
 
 ### 2. Update FEATURES.md (MANDATORY)
 
-In `modules/<module>/FEATURES.md`, find the entry for `featureId` and change its `Estado` field to `DONE`.
+In `duck-spec/modules/<module>/FEATURES.md`, find the entry for `featureId` and change its `Estado` field to `DONE`.
 
 Do not modify any other field in the entry.
 
 ### 3. Update SPEC.md (MANDATORY)
 
-`modules/<module>/SPEC.md` is the living functional spec of the module — it describes what the module currently does, not what it will do.
+`duck-spec/modules/<module>/SPEC.md` is the living functional spec of the module — it describes what the module currently does, not what it will do.
 
 If the file does not exist, create it.
 
@@ -71,7 +72,7 @@ Update it to reflect the new capabilities introduced by this feature:
 
 Read the following docs and update them **only if the feature introduced changes relevant to each**:
 
-#### ARCHITECTURE.md
+#### `duck-spec/docs/ARCHITECTURE.md`
 Update if the feature introduced or modified:
 - New services, infrastructure components, or deployment targets
 - New inter-service communication patterns
@@ -79,7 +80,7 @@ Update if the feature introduced or modified:
 
 Do NOT update for purely in-module logic changes.
 
-#### DOMAIN.md
+#### `duck-spec/docs/DOMAIN.md`
 Update if the feature introduced or modified:
 - New domain entities, aggregates, or value objects
 - New domain events
@@ -87,12 +88,12 @@ Update if the feature introduced or modified:
 
 Do NOT update for implementation details that have no domain-level meaning.
 
-#### BACKEND.md
+#### `duck-spec/docs/BACKEND.md`
 Update if the feature established a new reusable pattern, convention, or stack decision in the backend — for example, a new error-handling approach, a new middleware pattern, or a new library adopted.
 
 Do NOT update for one-off implementation choices that are not meant to be repeated.
 
-#### FRONTEND.md
+#### `duck-spec/docs/FRONTEND.md`
 Update if the feature established a new reusable component, design pattern, or UI convention.
 
 Do NOT update if no frontend files were modified (check the Files section of design.md).
@@ -118,8 +119,8 @@ Before returning, confirm:
   "result": {
     "status": "success|failure",
     "updatedFiles": [
-      "modules/<module>/FEATURES.md",
-      "modules/<module>/SPEC.md"
+      "duck-spec/modules/<module>/FEATURES.md",
+      "duck-spec/modules/<module>/SPEC.md"
     ],
     "error": null
   }

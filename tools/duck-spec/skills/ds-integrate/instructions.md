@@ -35,7 +35,7 @@ You handle git and GitHub integration. You receive a shared context object with 
 
 2. Derive the branch name from `featureId`:
    - Lowercase the ID and replace special characters with hyphens
-   - Read `modules/<module>/FEATURES.md` to extract a 2–4 word slug from the feature title
+   - Read `duck-spec/modules/<module>/FEATURES.md` to extract a 2–4 word slug from the feature title
    - Format: `feature/<feature-id-lowercase>-<short-slug>` (e.g. `feature/auth-001-login-flow`)
 
 3. Check the branch does not already exist:
@@ -74,7 +74,7 @@ You handle git and GitHub integration. You receive a shared context object with 
 
 ### Steps
 
-1. Read `modules/<module>/<feature-dir>/analysis.md` to extract:
+1. Read `duck-spec/modules/<module>/<feature-dir>/analysis.md` to extract:
    - Feature title (first heading or the **Objetivo** field)
    - A short summary of the functional requirements for the PR body
 

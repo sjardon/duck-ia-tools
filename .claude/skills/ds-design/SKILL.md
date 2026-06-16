@@ -19,13 +19,13 @@ You produce the technical design and task breakdown for a feature. Read `design.
 }
 ```
 
-The orchestrator also provides `module` — the module name matching a directory under `modules/`.
+The orchestrator also provides `module` — the module name matching a directory under `duck-spec/modules/`.
 
 ## Steps
 
 ### 1. Read analysis.md
 
-Read `modules/<module>/<feature-dir>/analysis.md` in full.
+Read `duck-spec/modules/<module>/<feature-dir>/analysis.md` in full.
 
 Extract:
 - All functional requirement IDs and statements (R001, R002…)
@@ -81,7 +81,7 @@ Using the template in `design.template.md`, fill in each section:
 - NF-IDs should appear if the design has a specific decision that addresses them
 - EC-IDs that require a specific design decision should appear; otherwise omit them
 
-Write the output to: `modules/<module>/<feature-dir>/design.md`
+Write the output to: `duck-spec/modules/<module>/<feature-dir>/design.md`
 
 ### 4. Produce tasks.md
 
@@ -100,7 +100,7 @@ Using the template in `tasks.template.md`, create one task per atomic, function-
 
 **Ordering rule:** tasks must be listed in dependency order — a task that depends on another must come after it.
 
-Write the output to: `modules/<module>/<feature-dir>/tasks.md`
+Write the output to: `duck-spec/modules/<module>/<feature-dir>/tasks.md`
 
 ### 5. Verify coverage
 
@@ -122,8 +122,8 @@ If any check fails, fix the gap before returning.
   "pendingFixes": [],
   "result": {
     "status": "success|failure",
-    "designFile": "modules/<module>/<feature-dir>/design.md",
-    "tasksFile": "modules/<module>/<feature-dir>/tasks.md",
+    "designFile": "duck-spec/modules/<module>/<feature-dir>/design.md",
+    "tasksFile": "duck-spec/modules/<module>/<feature-dir>/tasks.md",
     "error": null
   }
 }

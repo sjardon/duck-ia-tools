@@ -19,13 +19,13 @@ You produce the functional analysis for a feature. Read `analysis.template.md` i
 }
 ```
 
-The orchestrator also provides `module` — the module name matching a directory under `modules/`.
+The orchestrator also provides `module` — the module name matching a directory under `duck-spec/modules/`.
 
 ## Steps
 
 ### 1. Validate the feature
 
-Read `modules/<module>/FEATURES.md` and locate the entry for `featureId`.
+Read `duck-spec/modules/<module>/FEATURES.md` and locate the entry for `featureId`.
 
 If `Estado` is `DONE` or `DEPRECATED`: return `status: "failure"` with a descriptive error. Do NOT proceed.
 
@@ -59,7 +59,7 @@ Using the template in `analysis.template.md`, fill in each section by mapping FE
 - IDs must never be reused within the same analysis.md
 - IDs are the traceability keys used by tasks.md and ds-review
 
-Write the output to: `modules/<module>/<feature-dir>/analysis.md`
+Write the output to: `duck-spec/modules/<module>/<feature-dir>/analysis.md`
 
 The `<feature-dir>` is a kebab-case slug derived from the feature title (e.g., `AUTH-001 — Login flow` → `auth-001-login-flow`).
 
@@ -84,7 +84,7 @@ Determine effort based on the total analysis content:
   "pendingFixes": [],
   "result": {
     "status": "success|failure",
-    "analysisFile": "modules/<module>/<feature-dir>/analysis.md",
+    "analysisFile": "duck-spec/modules/<module>/<feature-dir>/analysis.md",
     "error": null
   }
 }

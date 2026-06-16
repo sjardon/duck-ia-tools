@@ -21,7 +21,7 @@ You implement the code changes for a feature. You receive a shared context objec
 
 `pendingFixes` is empty on the first run. On retry it contains findings from ds-review that must be resolved.
 
-The orchestrator also provides `module` — the module name matching a directory under `modules/`.
+The orchestrator also provides `module` — the module name matching a directory under `duck-spec/modules/`.
 
 ---
 
@@ -31,9 +31,9 @@ The orchestrator also provides `module` — the module name matching a directory
 
 Read all three files before writing any code:
 
-- `modules/<module>/<feature-dir>/analysis.md` — requirements (R-IDs, NF-IDs, EC-IDs) and constraints
-- `modules/<module>/<feature-dir>/design.md` — chosen solution, technical design, files list, requirement coverage
-- `modules/<module>/<feature-dir>/tasks.md` — ordered task list (T-IDs) with covered R-IDs and function-level descriptions
+- `duck-spec/modules/<module>/<feature-dir>/analysis.md` — requirements (R-IDs, NF-IDs, EC-IDs) and constraints
+- `duck-spec/modules/<module>/<feature-dir>/design.md` — chosen solution, technical design, files list, requirement coverage
+- `duck-spec/modules/<module>/<feature-dir>/tasks.md` — ordered task list (T-IDs) with covered R-IDs and function-level descriptions
 
 ### 2. Implement tasks in order
 

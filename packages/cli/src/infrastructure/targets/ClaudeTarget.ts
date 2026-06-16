@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile, appendFile } from "fs/promises";
+import { mkdir, readFile, writeFile } from "fs/promises";
 import { existsSync } from "fs";
 import { join, dirname } from "path";
 import type { ITargetAdapter, InstallOptions } from "../../shared/interfaces/ITargetAdapter.js";
@@ -10,7 +10,7 @@ export class ClaudeTarget implements ITargetAdapter {
     const { toolType, content, projectPath } = options;
 
     if (toolType === "agent") {
-      await this.appendToMarkdown(join(projectPath, "CLAUDE.md"), content);
+      await this.installAgent(projectPath, options.toolName, content);
     } else if (toolType === "skill") {
       await this.installSkill(projectPath, content);
     } else if (toolType === "hook") {
@@ -31,6 +31,12 @@ export class ClaudeTarget implements ITargetAdapter {
     await writeFile(absoluteDestination, content, "utf8");
   }
 
+  private async installAgent(projectPath: string, toolName: string, content: string): Promise<void> {
+    const agentDir = join(projectPath, ".claude", "agents");
+    await mkdir(agentDir, { recursive: true });
+    await writeFile(join(agentDir, `${toolName}.md`), content, "utf8");
+  }
+
   private async installSkill(projectPath: string, content: string): Promise<void> {
     const nameMatch = content.match(/^name:\s*(.+)$/m);
     const skillName = nameMatch?.[1]?.trim();
@@ -40,14 +46,6 @@ export class ClaudeTarget implements ITargetAdapter {
     const skillDir = join(projectPath, ".claude", "skills", skillName);
     await mkdir(skillDir, { recursive: true });
     await writeFile(join(skillDir, "SKILL.md"), content, "utf8");
-  }
-
-  private async appendToMarkdown(filePath: string, content: string): Promise<void> {
-    if (existsSync(filePath)) {
-      await appendFile(filePath, `\n\n---\n\n${content}`, "utf8");
-    } else {
-      await writeFile(filePath, content, "utf8");
-    }
   }
 
   private async readSettings(settingsPath: string): Promise<Record<string, unknown>> {

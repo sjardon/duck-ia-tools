@@ -30,6 +30,7 @@ export class AddUseCase {
     }
 
     const content = await this.repository.getContent(toolName, targetName);
+    const additionalFiles = await this.repository.getAdditionalFiles(toolName);
 
     const adapter = this.adapters.find((a) => a.name === targetName);
     if (!adapter) {
@@ -42,6 +43,7 @@ export class AddUseCase {
       content,
       projectPath: process.cwd(),
       destination: dest ?? tool.destination,
+      additionalFiles,
     };
 
     await adapter.install(options);

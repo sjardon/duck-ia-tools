@@ -3,5 +3,6 @@
   "type": "skill",
   "description": "Takes analysis.md for a feature and produces design.md and tasks.md (function-level task list referencing R-IDs). Sets lastStep to \"design\".",
   "tags": ["duck-spec", "skill", "design", "tasks"],
-  "targets": ["claude"]
+  "targets": ["claude"],
+  "files": ["design.template.md", "tasks.template.md"]
 }

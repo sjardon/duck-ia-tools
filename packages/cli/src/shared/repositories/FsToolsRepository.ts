@@ -1,6 +1,6 @@
 import { readdir, readFile } from "fs/promises";
-import { join, relative } from "path";
-import type { IToolsRepository, ToolMeta } from "../interfaces/IToolsRepository.js";
+import { join, relative, basename } from "path";
+import type { AdditionalFile, IToolsRepository, ToolMeta } from "../interfaces/IToolsRepository.js";
 
 export class FsToolsRepository implements IToolsRepository {
   constructor(private readonly toolsPath: string) {}
@@ -80,6 +80,36 @@ export class FsToolsRepository implements IToolsRepository {
   async getByName(name: string): Promise<ToolMeta | null> {
     const all = await this.listAll();
     return all.find((tool) => tool.name === name) ?? null;
+  }
+
+  async getAdditionalFiles(name: string): Promise<AdditionalFile[]> {
+    const meta = await this.getByName(name);
+
+    if (meta === null) {
+      throw new Error(`Tool "${name}" not found in ${this.toolsPath}`);
+    }
+
+    const toolDir = join(this.toolsPath, meta.path);
+    const entries = meta.files ?? [];
+    const result: AdditionalFile[] = [];
+
+    for (const entry of entries) {
+      const absolutePath = join(toolDir, entry);
+      let content: string;
+      try {
+        content = await readFile(absolutePath, "utf-8");
+      } catch (err: unknown) {
+        if ((err as NodeJS.ErrnoException).code === "ENOENT") {
+          throw new Error(
+            `Component "${name}" declares additional file "${entry}" which does not exist at "${absolutePath}".`
+          );
+        }
+        throw err;
+      }
+      result.push({ fileName: basename(entry), content });
+    }
+
+    return result;
   }
 
   async getContent(name: string, target: string): Promise<string> {

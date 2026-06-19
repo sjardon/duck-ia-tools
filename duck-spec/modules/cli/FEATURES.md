@@ -35,7 +35,7 @@
 ---
 
 ## CLI-002 — Soporte para archivos adicionales instalables en componentes
-**Estado:** TODO
+**Estado:** DONE
 **Contexto:** El pipeline de instalación del CLI está construido alrededor de un único `content: string`. `FsToolsRepository.getContent()` lee un solo archivo (`instructions.md` o su variante), y el target adapter lo escribe en un único destino. Algunos componentes (como los skills `ds-analysis` y `ds-design`) incluyen archivos adicionales junto a `instructions.md` (e.g., `analysis.template.md`, `design.template.md`) que actualmente son ignorados por `duck add`.
 **Objetivo:** Permitir que cualquier componente declare archivos adicionales en `meta.json` que se instalen en el mismo directorio de destino que el contenido principal al ejecutar `duck add`.
 **Requerimientos funcionales:**

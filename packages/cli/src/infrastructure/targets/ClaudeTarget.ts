@@ -2,42 +2,54 @@ import { mkdir, readFile, writeFile } from "fs/promises";
 import { existsSync } from "fs";
 import { join, dirname } from "path";
 import type { ITargetAdapter, InstallOptions } from "../../shared/interfaces/ITargetAdapter.js";
+import type { AdditionalFile } from "../../shared/interfaces/IToolsRepository.js";
 
 export class ClaudeTarget implements ITargetAdapter {
   name = "claude";
 
   async install(options: InstallOptions): Promise<void> {
-    const { toolType, content, projectPath } = options;
+    const { toolType, content, projectPath, additionalFiles } = options;
 
     if (toolType === "agent") {
-      await this.installAgent(projectPath, options.toolName, content);
+      await this.installAgent(projectPath, options.toolName, content, additionalFiles);
     } else if (toolType === "skill") {
-      await this.installSkill(projectPath, content);
+      await this.installSkill(projectPath, content, additionalFiles);
     } else if (toolType === "hook") {
       await this.updateSettingsHooks(projectPath, content);
+      await this.writeAdditionalFiles(join(projectPath, ".claude"), additionalFiles);
     } else if (toolType === "mcp-server") {
       await this.updateSettingsMcpServers(projectPath, content);
+      await this.writeAdditionalFiles(join(projectPath, ".claude"), additionalFiles);
     } else if (toolType === "instruction") {
       if (!options.destination) {
         throw new Error("destination is required for instruction type");
       }
       const absoluteDestination = join(projectPath, options.destination);
-      await this.writeInstruction(absoluteDestination, content);
+      await this.writeInstruction(absoluteDestination, content, additionalFiles);
     }
   }
 
-  private async writeInstruction(absoluteDestination: string, content: string): Promise<void> {
-    await mkdir(dirname(absoluteDestination), { recursive: true });
-    await writeFile(absoluteDestination, content, "utf8");
+  private async writeAdditionalFiles(destDir: string, additionalFiles: AdditionalFile[]): Promise<void> {
+    await mkdir(destDir, { recursive: true });
+    for (const file of additionalFiles) {
+      await writeFile(join(destDir, file.fileName), file.content, "utf8");
+    }
   }
 
-  private async installAgent(projectPath: string, toolName: string, content: string): Promise<void> {
+  private async writeInstruction(absoluteDestination: string, content: string, additionalFiles: AdditionalFile[]): Promise<void> {
+    await mkdir(dirname(absoluteDestination), { recursive: true });
+    await writeFile(absoluteDestination, content, "utf8");
+    await this.writeAdditionalFiles(dirname(absoluteDestination), additionalFiles);
+  }
+
+  private async installAgent(projectPath: string, toolName: string, content: string, additionalFiles: AdditionalFile[]): Promise<void> {
     const agentDir = join(projectPath, ".claude", "agents");
     await mkdir(agentDir, { recursive: true });
     await writeFile(join(agentDir, `${toolName}.md`), content, "utf8");
+    await this.writeAdditionalFiles(agentDir, additionalFiles);
   }
 
-  private async installSkill(projectPath: string, content: string): Promise<void> {
+  private async installSkill(projectPath: string, content: string, additionalFiles: AdditionalFile[]): Promise<void> {
     const nameMatch = content.match(/^name:\s*(.+)$/m);
     const skillName = nameMatch?.[1]?.trim();
     if (!skillName) {
@@ -46,6 +58,7 @@ export class ClaudeTarget implements ITargetAdapter {
     const skillDir = join(projectPath, ".claude", "skills", skillName);
     await mkdir(skillDir, { recursive: true });
     await writeFile(join(skillDir, "SKILL.md"), content, "utf8");
+    await this.writeAdditionalFiles(skillDir, additionalFiles);
   }
 
   private async readSettings(settingsPath: string): Promise<Record<string, unknown>> {

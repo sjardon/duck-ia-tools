@@ -42,6 +42,26 @@ Supported component types: `agent`, `hook`, `skill`, `mcp-server`, `kit`, `instr
 - Supports per-target variants (`variants/<target>.md`) using the same resolution mechanism as `agent` components.
 - Falls back to `instructions.md` when no variant file matches the active target.
 
+### Additional files
+
+Any component type may declare an optional `"files": string[]` field in its `meta.json`. Entries are file paths relative to the component directory. When present, `duck add` reads each declared file and installs it into the same destination directory as the main content.
+
+- If `"files"` is omitted or empty, installation proceeds with unchanged behavior.
+- If a declared file does not exist on disk, the installation is aborted before any file is written. The error message identifies both the missing file path and the component name.
+- Existing files at the destination are overwritten without interactive confirmation.
+
+The destination directory used for additional files per component type:
+
+| Type | Destination directory for additional files |
+|---|---|
+| `agent` | `.claude/agents/` |
+| `skill` | `.claude/skills/<skillName>/` |
+| `instruction` | same directory as the resolved destination file |
+| `hook` | `.claude/` |
+| `mcp-server` | `.claude/` |
+
+The `ds-analysis` and `ds-design` skills use this mechanism to install their template files (`analysis.template.md`, `design.template.md`, `tasks.template.md`) alongside their main `instructions.md`.
+
 ---
 
 ## Targets

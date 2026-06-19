@@ -19,7 +19,7 @@ You run a two-phase review of the implemented feature and return a structured fi
 }
 ```
 
-The orchestrator also provides `module` — the module name matching a directory under `modules/`.
+The orchestrator also provides `module` — the module name matching a directory under `duck-spec/modules/`.
 
 ---
 
@@ -67,9 +67,9 @@ Run this phase regardless of Phase 1 outcome.
 ### 1. Read the artifacts
 
 Read all three files:
-- `modules/<module>/<feature-dir>/analysis.md` — source of truth for what the feature must do
-- `modules/<module>/<feature-dir>/design.md` — requirement coverage table maps R-IDs to design decisions
-- `modules/<module>/<feature-dir>/tasks.md` — lists which T-IDs cover which R-IDs
+- `duck-spec/modules/<module>/<feature-dir>/analysis.md` — source of truth for what the feature must do
+- `duck-spec/modules/<module>/<feature-dir>/design.md` — requirement coverage table maps R-IDs to design decisions
+- `duck-spec/modules/<module>/<feature-dir>/tasks.md` — lists which T-IDs cover which R-IDs
 
 ### 2. Read the implementation
 

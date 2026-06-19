@@ -29,8 +29,8 @@ Each agent is identified by its `subagent_type`:
 ## Input
 
 The user provides:
-- `module` — module name matching a directory under `modules/` (e.g. `auth`)
-- `featureId` — feature ID from `modules/<module>/FEATURES.md` (e.g. `AUTH-001`)
+- `module` — module name matching a directory under `duck-spec/modules/` (e.g. `auth`)
+- `featureId` — feature ID from `duck-spec/modules/<module>/FEATURES.md` (e.g. `AUTH-001`)
 
 ## Shared context object
 
@@ -89,7 +89,7 @@ Update `lastStep` to `"branch"`.
 
 Use the **`Agent` tool** with `subagent_type: "ds-analysis"`
 
-Pass the current context. ds-analysis reads the feature from `modules/<module>/FEATURES.md`, produces `modules/<module>/<feature-dir>/analysis.md`, and returns the updated context with `effort` set.
+Pass the current context. ds-analysis reads the feature from `duck-spec/modules/<module>/FEATURES.md`, produces `duck-spec/modules/<module>/<feature-dir>/analysis.md`, and returns the updated context with `effort` set.
 
 Do NOT proceed until the analysis step is ended.
 
@@ -100,8 +100,8 @@ Update `lastStep` to `"analysis"`.
 Use the **`Agent` tool** with `subagent_type: "ds-design"`
 
 Pass the current context. ds-design reads `analysis.md`, evaluates at least three solution alternatives, chooses one, and produces:
-- `modules/<module>/<feature-dir>/design.md` — technical design, contracts, files to modify
-- `modules/<module>/<feature-dir>/tasks.md` — task list with IDs (T001…) referencing requirements (R1…)
+- `duck-spec/modules/<module>/<feature-dir>/design.md` — technical design, contracts, files to modify
+- `duck-spec/modules/<module>/<feature-dir>/tasks.md` — task list with IDs (T001…) referencing requirements (R1…)
 
 Do NOT proceed until both files exist.
 

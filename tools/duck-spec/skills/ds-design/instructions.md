@@ -19,13 +19,13 @@ You produce the technical design and task breakdown for a feature. Read `design.
 }
 ```
 
-The orchestrator also provides `module` — the module name matching a directory under `modules/`.
+The orchestrator also provides `module` — the module name matching a directory under `duck-spec/modules/`.
 
 ## Steps
 
 ### 1. Read analysis.md
 
-Read `modules/<module>/<feature-dir>/analysis.md` in full.
+Read `duck-spec/modules/<module>/<feature-dir>/analysis.md` in full.
 
 Extract:
 - All functional requirement IDs and statements (R001, R002…)
@@ -81,13 +81,22 @@ Using the template in `design.template.md`, fill in each section:
 - NF-IDs should appear if the design has a specific decision that addresses them
 - EC-IDs that require a specific design decision should appear; otherwise omit them
 
-Write the output to: `modules/<module>/<feature-dir>/design.md`
+Write the output to: `duck-spec/modules/<module>/<feature-dir>/design.md`
 
 ### 4. Produce tasks.md
 
 Using the template in `tasks.template.md`, create one task per atomic, function-level unit of work.
 
 **Task granularity rule:** each task describes what to do in a specific function or method — "In function X do Y." One task = one independently committable change.
+
+**Required task schema — every task must specify:**
+- `id`: T001, T002… (sequential, zero-padded)
+- `file`: exact file path matching an entry in design.md Files section
+- `symbol`: the specific function, class, method, or export being created or modified
+- `action`: one sentence — exactly what to implement in that symbol
+- `covers`: list of R-IDs and NF-IDs this task satisfies
+
+A task with no `file` or no `symbol` is too vague — split it or make it more specific before writing.
 
 **Task ID rules:**
 - IDs are sequential and zero-padded: T001, T002…
@@ -100,7 +109,7 @@ Using the template in `tasks.template.md`, create one task per atomic, function-
 
 **Ordering rule:** tasks must be listed in dependency order — a task that depends on another must come after it.
 
-Write the output to: `modules/<module>/<feature-dir>/tasks.md`
+Write the output to: `duck-spec/modules/<module>/<feature-dir>/tasks.md`
 
 ### 5. Verify coverage
 
@@ -122,8 +131,8 @@ If any check fails, fix the gap before returning.
   "pendingFixes": [],
   "result": {
     "status": "success|failure",
-    "designFile": "modules/<module>/<feature-dir>/design.md",
-    "tasksFile": "modules/<module>/<feature-dir>/tasks.md",
+    "designFile": "duck-spec/modules/<module>/<feature-dir>/design.md",
+    "tasksFile": "duck-spec/modules/<module>/<feature-dir>/tasks.md",
     "error": null
   }
 }

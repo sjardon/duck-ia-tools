@@ -19,13 +19,13 @@ You produce the functional analysis for a feature. Read `analysis.template.md` i
 }
 ```
 
-The orchestrator also provides `module` — the module name matching a directory under `modules/`.
+The orchestrator also provides `module` — the module name matching a directory under `duck-spec/modules/`.
 
 ## Steps
 
 ### 1. Validate the feature
 
-Read `modules/<module>/FEATURES.md` and locate the entry for `featureId`.
+Read `duck-spec/modules/<module>/FEATURES.md` and locate the entry for `featureId`.
 
 If `Estado` is `DONE` or `DEPRECATED`: return `status: "failure"` with a descriptive error. Do NOT proceed.
 
@@ -54,12 +54,35 @@ Using the template in `analysis.template.md`, fill in each section by mapping FE
 - State-dependent → `WHILE <state> the system shall <response>`
 - Keep each statement atomic — one observable behavior per row.
 
+**Edge case rule:**
+Every EC entry must specify both:
+1. A concrete trigger: `WHEN <specific event>`
+2. A concrete, observable expected behavior: `the system shall <specific verifiable response>`
+
+Vague behaviors are rejected:
+- ❌ "the system shall not crash"
+- ❌ "routing must degrade gracefully"
+- ✅ "the system shall redirect to `/`"
+- ✅ "the system shall return HTTP 404 with an empty body"
+
+If a FEATURES.md edge case is too vague to produce a concrete expected behavior, infer the most conservative safe behavior and document the assumption inline.
+
+**NF vs. Technical constraints rule:**
+Before assigning an NF-ID, classify each non-functional item:
+
+| Type | Criterion | Goes to |
+|---|---|---|
+| Observable, measurable at runtime | Response time target, availability SLA, accessibility level, security guarantee with measurable outcome | Non-functional requirements (NF-IDs) |
+| Structural or implementation restriction | "no external deps", "components must be composable", "use React Router" | Technical constraints |
+
+When in doubt: if you cannot write a test that observes the behavior at runtime, it is a constraint, not an NF.
+
 **ID rules:**
 - IDs are sequential and zero-padded: R001, R002…, NF001…, EC001…
 - IDs must never be reused within the same analysis.md
 - IDs are the traceability keys used by tasks.md and ds-review
 
-Write the output to: `modules/<module>/<feature-dir>/analysis.md`
+Write the output to: `duck-spec/modules/<module>/<feature-dir>/analysis.md`
 
 The `<feature-dir>` is a kebab-case slug derived from the feature title (e.g., `AUTH-001 — Login flow` → `auth-001-login-flow`).
 
@@ -84,7 +107,7 @@ Determine effort based on the total analysis content:
   "pendingFixes": [],
   "result": {
     "status": "success|failure",
-    "analysisFile": "modules/<module>/<feature-dir>/analysis.md",
+    "analysisFile": "duck-spec/modules/<module>/<feature-dir>/analysis.md",
     "error": null
   }
 }

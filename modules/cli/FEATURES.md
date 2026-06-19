@@ -31,3 +31,30 @@
 **Technical constraints:**
 - El campo `destination` en `meta.json` puede ser una ruta relativa al directorio raíz del proyecto del usuario.
 - La precedencia es: flag `--dest` > `destination` en `meta.json`.
+
+---
+
+## CLI-002 — Soporte para archivos adicionales instalables en componentes
+**Estado:** TODO
+**Contexto:** El pipeline de instalación del CLI está construido alrededor de un único `content: string`. `FsToolsRepository.getContent()` lee un solo archivo (`instructions.md` o su variante), y el target adapter lo escribe en un único destino. Algunos componentes (como los skills `ds-analysis` y `ds-design`) incluyen archivos adicionales junto a `instructions.md` (e.g., `analysis.template.md`, `design.template.md`) que actualmente son ignorados por `duck add`.
+**Objetivo:** Permitir que cualquier componente declare archivos adicionales en `meta.json` que se instalen en el mismo directorio de destino que el contenido principal al ejecutar `duck add`.
+**Requerimientos funcionales:**
+- `meta.json` acepta un campo opcional `"files": string[]` con rutas de archivos relativas al directorio del componente.
+- `FsToolsRepository` expone los archivos adicionales declarados en `"files"` junto al contenido principal.
+- `InstallOptions` e `ITargetAdapter` reciben la lista de archivos adicionales (nombre + contenido).
+- `ClaudeTarget` escribe cada archivo adicional en el mismo directorio de destino que el contenido principal, para todos los tipos de componente (`agent`, `skill`, `instruction`, `hook`, `mcp-server`).
+- Los skills `ds-analysis` y `ds-design` declaran sus templates en sus respectivos `meta.json` usando el nuevo campo `"files"`.
+**Requerimientos no funcionales:**
+- Si un archivo declarado en `"files"` no existe en disco, la instalación aborta con un error descriptivo que identifica el archivo faltante y el componente.
+**Fuera de scope:**
+- Destino personalizado por archivo adicional (todos se instalan en el mismo directorio que el contenido principal).
+- Auto-discovery de archivos (solo se instalan los declarados explícitamente en `"files"`).
+- Variantes por target para archivos adicionales.
+- Confirmación interactiva de sobreescritura para archivos adicionales.
+**Edge cases:**
+- `"files"` omitido o vacío → comportamiento sin cambios, no se instala ningún archivo adicional.
+- Un archivo declarado en `"files"` no existe en disco → abortar instalación con error descriptivo.
+- El archivo adicional ya existe en el destino → sobreescribir sin confirmación (mismo comportamiento que el contenido principal para `agent` y `skill`).
+**Technical constraints:**
+- Las rutas en `"files"` son relativas al directorio del componente en el repositorio.
+- Los archivos adicionales no soportan variantes por target; se instala el archivo tal cual.

@@ -19,7 +19,7 @@ You run a two-phase review of the implemented feature and return a structured fi
 }
 ```
 
-The orchestrator also provides `module` — the module name matching a directory under `modules/`.
+The orchestrator also provides `module` — the module name matching a directory under `duck-spec/modules/`.
 
 ---
 
@@ -67,9 +67,9 @@ Run this phase regardless of Phase 1 outcome.
 ### 1. Read the artifacts
 
 Read all three files:
-- `modules/<module>/<feature-dir>/analysis.md` — source of truth for what the feature must do
-- `modules/<module>/<feature-dir>/design.md` — requirement coverage table maps R-IDs to design decisions
-- `modules/<module>/<feature-dir>/tasks.md` — lists which T-IDs cover which R-IDs
+- `duck-spec/modules/<module>/<feature-dir>/analysis.md` — source of truth for what the feature must do
+- `duck-spec/modules/<module>/<feature-dir>/design.md` — requirement coverage table maps R-IDs to design decisions
+- `duck-spec/modules/<module>/<feature-dir>/tasks.md` — lists which T-IDs cover which R-IDs
 
 ### 2. Read the implementation
 
@@ -98,13 +98,14 @@ For each unmet requirement, produce one finding entry:
 {
   "type": "review",
   "severity": "error",
+  "rId": "R003",
   "file": "src/auth/login.ts",
   "line": null,
-  "detail": "R003 not satisfied: WHEN login fails the system shall return a 401 response — implementation returns 500 on invalid credentials"
+  "detail": "WHEN login fails the system shall return a 401 response — implementation returns 500 on invalid credentials"
 }
 ```
 
-- Always prefix `detail` with the R-ID or NF-ID that is not satisfied
+- `rId` must contain the exact R-ID or NF-ID that is not satisfied — never embed it in `detail`
 - `file` should point to the most relevant implementation file; use `null` if the behavior is entirely absent
 - Functional gaps are always `severity: "error"`
 
@@ -119,6 +120,7 @@ For each unmet requirement, produce one finding entry:
     {
       "type": "lint|build|test|review",
       "severity": "error|warning",
+      "rId": "R003",
       "file": "src/auth/login.ts",
       "line": 42,
       "detail": "<exact message>"
@@ -126,6 +128,8 @@ For each unmet requirement, produce one finding entry:
   ]
 }
 ```
+
+`rId` is populated only on `review`-type findings; set to `null` for `lint`, `build`, and `test` findings.
 
 - `status` is `"pass"` if and only if there are zero `error`-severity findings
 - `status` is `"fail"` if there is at least one `error`-severity finding

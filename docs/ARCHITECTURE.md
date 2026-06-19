@@ -36,6 +36,24 @@ tools/<any/path>/
 
 The `name` field in `meta.json` is the **global unique identifier** for the tool across the entire repository. All references to a tool (from the CLI, kits, or configuration) use `name` — not the filesystem path. The path is used only internally for content resolution.
 
+### Additional files
+
+A component directory may contain files beyond `instructions.md` that should be installed alongside the main content. These are declared explicitly in `meta.json` via an optional `"files"` field:
+
+```jsonc
+{
+  "name": "ds-analysis",
+  "type": "skill",
+  "files": ["analysis.template.md"]
+}
+```
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `files` | `string[]` | no | Paths relative to the component directory. Each file is read and written to the same destination directory as the main content. |
+
+If a path listed in `"files"` does not exist on disk at install time, the installation aborts with an error that identifies both the component and the missing file. Files are installed in the same destination directory as the main content, with no per-file destination override and no target-specific variant. Existing destination files are overwritten without confirmation.
+
 ### Tool discovery
 
 The CLI discovers tools by recursively scanning `tools/` for every `meta.json` file. There are no hard-coded type subdirectories.
@@ -151,6 +169,35 @@ handler → useCase → interface ← repository implementation
 ```
 
 The useCase never imports from `repositories/` or `infrastructure/` directly. Concrete implementations are injected in `index.ts`.
+
+### Shared interface contracts
+
+`IToolsRepository` (in `shared/interfaces/IToolsRepository.ts`) defines the following methods:
+
+| Method | Return type | Description |
+|---|---|---|
+| `listAll()` | `Promise<ToolMeta[]>` | Returns all discoverable tools in the repository |
+| `getByName(name)` | `Promise<ToolMeta \| null>` | Finds a tool by its unique name |
+| `getContent(name, target)` | `Promise<string>` | Resolves and returns the main content for the given tool and target |
+| `getAdditionalFiles(name)` | `Promise<AdditionalFile[]>` | Resolves and returns additional files declared in `meta.json`. Returns an empty array if `"files"` is absent or empty. Throws with a descriptive message if any declared file does not exist on disk. |
+
+`InstallOptions` (in `shared/interfaces/ITargetAdapter.ts`) carries the following fields to the target adapter:
+
+| Field | Type | Description |
+|---|---|---|
+| `toolName` | `string` | The unique name of the component being installed |
+| `toolType` | `string` | The component type (`agent`, `skill`, `instruction`, `hook`, `mcp-server`) |
+| `content` | `string` | Main file content resolved for the active target |
+| `projectPath` | `string` | Absolute path to the user's project root |
+| `destination` | `string \| undefined` | Destination override (from `--dest` flag or `meta.json`) |
+| `additionalFiles` | `AdditionalFile[]` | List of additional files to write alongside the main content; always present, may be empty |
+
+`AdditionalFile` (in `shared/interfaces/IToolsRepository.ts`) is a value type:
+
+| Field | Type | Description |
+|---|---|---|
+| `fileName` | `string` | File name only (no path separators); written as-is inside the destination directory |
+| `content` | `string` | Raw file content |
 
 ---
 

@@ -1,7 +1,8 @@
 {
   "name": "skill-ds-integrate",
   "type": "skill",
-  "description": "Handles git and GitHub integration for the duck-spec workflow. Supports CREATE_BRANCH and CREATE_MR operations.",
+  "description": "Handles git and GitHub integration for the duck-spec workflow. Supports CREATE_BRANCH and CREATE_MR operations. Use when the orchestrator or user requests a git branch or GitHub PR for a duck-spec feature.",
   "tags": ["duck-spec", "skill", "git", "github", "integration"],
-  "targets": ["claude"]
+  "targets": ["claude"],
+  "files": ["create-branch.md", "create-mr.md"]
 }

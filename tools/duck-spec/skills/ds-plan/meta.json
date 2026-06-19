@@ -1,7 +1,7 @@
 {
   "name": "skill-ds-plan",
   "type": "skill",
-  "description": "Interactive planning skill. Takes a free-form idea and guides the user through a conversation to produce a well-formed FEATURES.md entry.",
+  "description": "Interactive planning skill. Takes a free-form idea and guides the user through a conversation to produce a well-formed FEATURES.md entry. Use when a free-form feature idea needs to be formalized into a FEATURES.md entry.",
   "tags": ["duck-spec", "skill", "planning", "features", "requirements"],
   "targets": ["claude"]
 }

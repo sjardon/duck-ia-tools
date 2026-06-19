@@ -1,8 +1,8 @@
 {
   "name": "skill-ds-design",
   "type": "skill",
-  "description": "Takes analysis.md for a feature and produces design.md and tasks.md (function-level task list referencing R-IDs). Sets lastStep to \"design\".",
+  "description": "Takes analysis.md for a feature and produces design.md and tasks.md (function-level task list referencing R-IDs). Sets lastStep to \"design\". Use when the orchestrator (ds-orchestrate) has completed ds-analysis and lastStep is \"analysis\".",
   "tags": ["duck-spec", "skill", "design", "tasks"],
   "targets": ["claude"],
-  "files": ["design.template.md", "tasks.template.md"]
+  "files": ["design-steps.md", "design.template.md", "tasks.template.md"]
 }
